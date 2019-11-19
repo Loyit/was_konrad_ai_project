@@ -19,14 +19,12 @@ namespace Rezerwacja_pokoi.Controllers
             _context = context;
         }
 
-        // GET: Reservations
         public async Task<IActionResult> Index()
         {
             var hotelContext = _context.Reservations.Include(r => r.Payment).Include(r => r.Room).Include(r => r.User);
             return View(await hotelContext.ToListAsync());
         }
 
-        // GET: Reservations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -47,7 +45,6 @@ namespace Rezerwacja_pokoi.Controllers
             return View(reservation);
         }
 
-        // GET: Reservations/Create
         public IActionResult Create()
         {
             ViewData["PaymentID"] = new SelectList(_context.Payments, "PaymentID", "PaymentID");
@@ -56,13 +53,17 @@ namespace Rezerwacja_pokoi.Controllers
             return View();
         }
 
-        // POST: Reservations/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,UserID,RoomID,PaymentID,ChosenConvID,DateFrom,DateTo,Confirmed,Feedback")] Reservation reservation)
         {
+            var availableRooms = _context.Rooms.Where(m => m.Reservations.All(r => r.DateTo <= reservation.DateFrom || r.DateFrom >= reservation.DateTo));
+
+            if (!availableRooms.Any(m=> m.RoomID == reservation.RoomID))
+            {
+                ModelState.AddModelError("","Nie można dokonać rezerwacji w tym okresie ponieważ pokój jest zajety.");
+            }
+         
             if (ModelState.IsValid)
             {
                 _context.Add(reservation);
@@ -75,7 +76,6 @@ namespace Rezerwacja_pokoi.Controllers
             return View(reservation);
         }
 
-        // GET: Reservations/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -94,9 +94,6 @@ namespace Rezerwacja_pokoi.Controllers
             return View(reservation);
         }
 
-        // POST: Reservations/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,RoomID,PaymentID,ChosenConvID,DateFrom,DateTo,Confirmed,Feedback")] Reservation reservation)
@@ -132,7 +129,6 @@ namespace Rezerwacja_pokoi.Controllers
             return View(reservation);
         }
 
-        // GET: Reservations/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -153,7 +149,6 @@ namespace Rezerwacja_pokoi.Controllers
             return View(reservation);
         }
 
-        // POST: Reservations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -168,5 +163,6 @@ namespace Rezerwacja_pokoi.Controllers
         {
             return _context.Reservations.Any(e => e.ID == id);
         }
+
     }
 }

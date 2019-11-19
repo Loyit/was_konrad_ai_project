@@ -48,6 +48,46 @@ namespace Rezerwacja_pokoi.Data
                 }
                 context.SaveChanges();
             }
+
+             if (!context.Payments.Any())
+             {
+
+
+                 var payments = new Payment[]
+                 {
+                 new Payment{ Method = "Przelew", TotalCost = 300},
+                 new Payment{ Method = "Gotówka", TotalCost = 100},
+
+                 };
+
+                 foreach (Payment p in payments)
+                 {
+                     context.Payments.Add(p);
+                 }
+                 context.SaveChanges();
+             }
+
+            if (!context.Reservations.Any())
+            {
+
+
+
+                var reserv = new Reservation[]
+                {
+                new Reservation{UserID = 1, RoomID = 1, DateFrom =new DateTime(2019, 6, 26, 18, 0, 0), DateTo =new DateTime(2019, 6, 29, 12, 0, 0), Confirmed=true  },
+                new Reservation{UserID = 3, RoomID = 3, DateFrom =new DateTime(2019, 6, 28, 16, 0, 0), DateTo =new DateTime(2019, 7, 2, 12, 0, 0), Confirmed=true  },
+                };
+                foreach (Reservation res in reserv)
+                {
+                    context.Reservations.Add(res);
+                }
+                context.SaveChanges();
+            }
+
+
+
+
+
         }
 
     }

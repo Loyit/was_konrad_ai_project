@@ -1,14 +1,10 @@
 ﻿@model Rezerwacja_pokoi.Models.Reservation
-
 @{
     ViewData["Title"] = "Delete";
 }
-
-<h1>Delete</h1>
-
-<h3>Are you sure you want to delete this?</h3>
+<h3>Czy jestes pewien, że chcesz usunąć tę rezerwację?</h3>
 <div>
-    <h4>Reservation</h4>
+    <h4>Rezerwacja</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -60,10 +56,9 @@
             @Html.DisplayFor(model => model.Payment.PaymentID)
         </dd class>
     </dl>
-    
     <form asp-action="Delete">
         <input type="hidden" asp-for="ID" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <input type="submit" value="Usuń" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>
 </div>

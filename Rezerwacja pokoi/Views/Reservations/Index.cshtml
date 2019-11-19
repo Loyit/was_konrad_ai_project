@@ -1,11 +1,8 @@
 ﻿@model IEnumerable<Rezerwacja_pokoi.Models.Reservation>
-
 @{
     ViewData["Title"] = "Lista rezerwacji";
 }
-
 <h1>Lista rezerwacji</h1>
-
 <p>
     <a asp-action="Create">Dodaj</a>
 </p>
@@ -67,9 +64,9 @@
                 @Html.DisplayFor(modelItem => item.Payment.PaymentID)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edytuj</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Szczegóły</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Usuń</a>
             </td>
         </tr>
 }

@@ -10,22 +10,22 @@ using Rezerwacja_pokoi.Models;
 
 namespace Rezerwacja_pokoi.Controllers
 {
-    public class UsersController : Controller
+    public class PaymentsController : Controller
     {
         private readonly HotelContext _context;
 
-        public UsersController(HotelContext context)
+        public PaymentsController(HotelContext context)
         {
             _context = context;
         }
 
-        // GET: Users
+        // GET: Payments
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Users.ToListAsync());
+            return View(await _context.Payments.ToListAsync());
         }
 
-        // GET: Users/Details/5
+        // GET: Payments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace Rezerwacja_pokoi.Controllers
                 return NotFound();
             }
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.UserID == id);
-            if (user == null)
+            var payment = await _context.Payments
+                .FirstOrDefaultAsync(m => m.PaymentID == id);
+            if (payment == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(payment);
         }
 
-        // GET: Users/Create
+        // GET: Payments/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Users/Create
+        // POST: Payments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserID,Name,Password,Email,FirstName,LastName,Address")] User user)
+        public async Task<IActionResult> Create([Bind("PaymentID,Method,TotalCost,Date")] Payment payment)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(user);
+                _context.Add(payment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(payment);
         }
 
-        // GET: Users/Edit/5
+        // GET: Payments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,20 +73,22 @@ namespace Rezerwacja_pokoi.Controllers
                 return NotFound();
             }
 
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            var payment = await _context.Payments.FindAsync(id);
+            if (payment == null)
             {
                 return NotFound();
             }
-            return View(user);
+            return View(payment);
         }
 
-       
+        // POST: Payments/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserID,Name,Password,Email,FirstName,LastName,Address")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("PaymentID,Method,TotalCost,Date")] Payment payment)
         {
-            if (id != user.UserID)
+            if (id != payment.PaymentID)
             {
                 return NotFound();
             }
@@ -95,12 +97,12 @@ namespace Rezerwacja_pokoi.Controllers
             {
                 try
                 {
-                    _context.Update(user);
+                    _context.Update(payment);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.UserID))
+                    if (!PaymentExists(payment.PaymentID))
                     {
                         return NotFound();
                     }
@@ -111,10 +113,10 @@ namespace Rezerwacja_pokoi.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(payment);
         }
 
-       
+        // GET: Payments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -122,30 +124,30 @@ namespace Rezerwacja_pokoi.Controllers
                 return NotFound();
             }
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.UserID == id);
-            if (user == null)
+            var payment = await _context.Payments
+                .FirstOrDefaultAsync(m => m.PaymentID == id);
+            if (payment == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(payment);
         }
 
-       
+        // POST: Payments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            _context.Users.Remove(user);
+            var payment = await _context.Payments.FindAsync(id);
+            _context.Payments.Remove(payment);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UserExists(int id)
+        private bool PaymentExists(int id)
         {
-            return _context.Users.Any(e => e.UserID == id);
+            return _context.Payments.Any(e => e.PaymentID == id);
         }
     }
 }

@@ -33,7 +33,15 @@ namespace Rezerwacja_pokoi
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<HotelContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            var server = Configuration["DBServer"] ?? "ms-sql-server";
+            var port = Configuration["DBPort"] ?? "1433";
+            var user = Configuration["DBUser"] ?? "SA";
+            var password = Configuration["DBPassword"] ?? "Pa55w0rd2019";
+            var database = Configuration["Database"] ?? "Rooms";
+
+
+
+            services.AddDbContext<HotelContext>(options => options.UseSqlServer($"Server={server},{port};Initial Catalog={database};User ID={user};Password={password}"));
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

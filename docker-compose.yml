@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  rezerwacjapokoi:
+    image: ${DOCKER_REGISTRY-}rezerwacjapokoi
+    build:
+      context: .
+      dockerfile: Rezerwacja pokoi/Dockerfile
+    ports: 
+      - "8080:80"
+      - "4433:443"
+      
+  ms-sql-server:
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Pa55w0rd2019"
+      MSSQL_PID: "Express"
+    ports:
+      - "1433:1433"
